@@ -1,0 +1,7 @@
+{
+  "name": "renova-tche",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
