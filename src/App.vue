@@ -1,9 +1,21 @@
 <template>
-  <ion-app>
-    <ion-router-outlet />
-  </ion-app>
+  <IonApp>
+    <HeaderComponent />
+      <router-view />
+    <FooterComponent />
+  </IonApp>
 </template>
 
-<script setup lang="ts">
-import { IonApp, IonRouterOutlet } from '@ionic/vue';
+<script>
+import HeaderComponent from './components/HeaderComponent.vue';
+import FooterComponent from './components/FooterComponent.vue';
+import { IonApp } from '@ionic/vue';
+
+export default {
+  components: {
+    HeaderComponent,
+    FooterComponent,
+    IonApp,
+  }
+};
 </script>
