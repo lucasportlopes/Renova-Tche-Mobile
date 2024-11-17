@@ -3,6 +3,9 @@ import StartPage from '../views/HomePage.vue';
 import DonationsPage from '../views/DonationsPage.vue';
 import SearchPage from '../views/SearchPage.vue';
 import MessagesPage from '../views/MessagesPage.vue';
+import AddDonationPage from '@/views/AddDonationPage.vue';
+import ConfirmDonationPage from '@/views/ConfirmDonationPage.vue';
+import DonationDetailsPage from '@/views/DonationDetailsPage.vue';
 
 const routes = [
   {
@@ -28,6 +31,23 @@ const routes = [
     path: '/mensagens',
     name: 'messages',
     component: MessagesPage
+  },
+  {
+    path: '/cadastrar',
+    name: 'addDonation',
+    component: AddDonationPage
+  },
+  {
+    path: '/detalhes/:id',
+    name: 'donationDetails',
+    component: DonationDetailsPage,
+    props: true
+  },
+  {
+    path: '/confirmacao',
+    name: 'confirmDonation',
+    component: ConfirmDonationPage, 
+    props: true
   }
 ];
 
