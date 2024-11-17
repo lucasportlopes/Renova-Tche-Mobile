@@ -6,6 +6,10 @@ import MessagesPage from '../views/MessagesPage.vue';
 import AddDonationPage from '@/views/AddDonationPage.vue';
 import ConfirmDonationPage from '@/views/ConfirmDonationPage.vue';
 import DonationDetailsPage from '@/views/DonationDetailsPage.vue';
+import RequestDonationPage from '@/views/RequestDonationPage.vue';
+import NotificationsPage from '@/views/NotificationsPage.vue';
+import RequestStatusPage from '@/views/RequestStatusPage.vue'; 
+import ConcludeDonationPage from '@/views/ConcludeDonationPage.vue';
 
 const routes = [
   {
@@ -46,7 +50,29 @@ const routes = [
   {
     path: '/confirmacao',
     name: 'confirmDonation',
-    component: ConfirmDonationPage, 
+    component: ConfirmDonationPage,
+    props: true
+  },
+  {
+    path: '/solicitar/:id',
+    name: 'requestDonation',
+    component: RequestDonationPage,
+    props: true
+  },
+  {
+    path: '/notificacoes',
+    name: 'notifications',
+    component: NotificationsPage
+  },
+  {
+    path: '/solicitacoes',
+    name: 'requestStatus',
+    component: RequestStatusPage
+  },
+  {
+    path: '/concluir/:id',
+    name: 'concludeDonation',
+    component: ConcludeDonationPage,
     props: true
   }
 ];
