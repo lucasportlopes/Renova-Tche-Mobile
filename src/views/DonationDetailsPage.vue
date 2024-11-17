@@ -131,3 +131,103 @@ export default {
   },
 };
 </script>
+<style scoped>
+.content {
+  --background: #f9f6e2;
+  padding: 0;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 16px;
+}
+
+/* Estilo para o carrossel de imagens */
+.image-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0 16px;
+}
+
+.image-carousel img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Informações do cabeçalho */
+.header-info {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 1rem;
+  background-color: #30757a;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.donor-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.donor-info h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.message-button {
+  margin-left: auto;
+  background-color: #f9f6e2;
+  color: #30757a;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+}
+
+/* Tabs e conteúdo das tabs */
+.tabs-container {
+  margin-top: 16px;
+  padding: 0 16px;
+}
+
+.tab-content {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Botão de ação */
+.action-button {
+  margin: 16px;
+  width: calc(100% - 32px);
+  height: 48px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #30757a;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-button:hover {
+  background-color: #285d65;
+}
+</style>

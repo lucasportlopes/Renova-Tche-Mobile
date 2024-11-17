@@ -7,7 +7,7 @@
     <IonTitle class="text-black title">{{ title }}</IonTitle>
 
     <div>
-      <IonButton fill="clear" @click="showAlert('Notifications')">
+      <IonButton fill="clear" @click="navigateToNotifications">
         <IonIcon slot="icon-only" :icon="notificationsOutline" class="icon" />
       </IonButton>
       <IonButton fill="clear" @click="showAlert('Profile')" class="profile-picture">
@@ -19,7 +19,7 @@
 
 <script>
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { IonButton, IonHeader, IonIcon, IonTitle } from '@ionic/vue';
 import { help, notificationsOutline } from 'ionicons/icons';
 
@@ -32,7 +32,12 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const title = ref('Renovatchê!');
+
+    const navigateToNotifications = () => {
+      router.push({ name: 'notifications' });
+    };
 
     const showAlert = (msg) => {
       alert(`"${msg}" Não implementado`);
@@ -48,6 +53,7 @@ export default {
 
     return {
       title,
+      navigateToNotifications,
       showAlert,
       help,
       notificationsOutline,
@@ -55,6 +61,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .header {
