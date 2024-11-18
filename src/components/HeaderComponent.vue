@@ -4,8 +4,8 @@
       <IonIcon slot="icon-only" :icon="help" class="icon" />
     </IonButton>
 
-    <IonTitle class="text-black title">{{ title }}</IonTitle>
-
+    <img :src="title" alt="Title">
+    
     <div>
       <IonButton fill="clear" @click="navigateToNotifications">
         <IonIcon slot="icon-only" :icon="notificationsOutline" class="icon" />
@@ -20,20 +20,21 @@
 <script>
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { IonButton, IonHeader, IonIcon, IonTitle } from '@ionic/vue';
+import { IonButton, IonHeader, IonIcon } from '@ionic/vue';
 import { help, notificationsOutline } from 'ionicons/icons';
+import mainHeader from '@/assets/mainHeader.svg';
+import donations from '@/assets/donations.svg';
 
 export default {
   components: {
     IonHeader,
-    IonTitle,
     IonButton,
     IonIcon,
   },
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const title = ref('Renovatchê!');
+    const title = ref(mainHeader);
 
     const navigateToNotifications = () => {
       router.push({ name: 'notifications' });
@@ -45,9 +46,9 @@ export default {
 
     watch(route, (newRoute) => {
       if (newRoute.name === 'donations') {
-        title.value = 'Doações!';
+        title.value = donations;
       } else {
-        title.value = 'Renovatchê!';
+        title.value = mainHeader;
       }
     });
 
@@ -69,12 +70,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-}
-
-.title {
-  text-align: center;
-  font-size: 2rem;
-  color: #1E1B13;
 }
 
 .profile-picture {

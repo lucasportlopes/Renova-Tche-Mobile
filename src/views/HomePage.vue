@@ -13,3 +13,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+ion-content {
+  --ion-background-color: #F9F6E2;
+}
+</style>

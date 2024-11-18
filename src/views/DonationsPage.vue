@@ -6,7 +6,7 @@
         :key="category.value"
         @click="filterDonations(category.value)"
         :class="{
-          'text-[#30757A] border border-[#30757A]': selectedCategory === category.value,
+          'category-selected border border-[#30757A]': selectedCategory === category.value,
           'bg-[#30757A]': selectedCategory !== category.value,
         }"
         class="py-2 px-4 rounded-2xl text-white"
@@ -123,11 +123,19 @@ export default {
 
 .add-button {
   --background: #30757A;
+  height: 3.5rem;
+  width: 3.5rem;
+  --border-radius: 12px;
+  font-size: 1rem;
 }
 
 .content {
   padding: 0;
   height: 100%;
   --background: #F9F6E2;
+}
+
+.category-selected {
+  color: #30757A;
 }
 </style>

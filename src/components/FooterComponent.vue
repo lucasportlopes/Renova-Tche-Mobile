@@ -82,7 +82,7 @@ export default {
 .footer-label {
   padding: 0;
   margin: 0;
-  font-size: 3vw;
+  font-size: 0.875rem;
   color: #4B4639;
 }
 
@@ -96,13 +96,18 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.3rem;
   padding: 0;
+  height: 80px;
 }
 
 .icon {
+  box-sizing: border-box;
   color: #4B4639;
-  padding: 0.25em .45em;
+  padding: 0.3rem 1.05rem;
+  width: 24px;
+  height: 24px;
   border-radius: 45%;
 }
 

@@ -10,7 +10,7 @@
           v-for="(_, index) in itemPhotos"
           :key="index"
           :class="['indicator', { active: index === currentIndex }]"
-          @click="currentIndex = index"
+          @click.stop="currentIndex = index"
         ></span>
       </div>
     </div>
@@ -51,8 +51,8 @@ export default {
 .donation-card {
   display: flex;
   flex-direction: column;
-  width: 75vw;
-  height: 30vh;
+  width: 20.5rem;
+  height: 13.5rem;
   background-color: #F9F6E2;
 }
 
@@ -77,28 +77,39 @@ export default {
 .carousel-indicators {
   display: flex;
   justify-content: center;
-  margin-top: -12px;
+  align-items: center;
+  background-color: #626266;
+  padding: 12px 8px;
+  width: 112px;
+  height: 24px;
+  border-radius: 12px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 6px;
 }
 
 .indicator {
   width: 10px;
   height: 10px;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   margin: 0 4px;
   cursor: pointer;
 }
 
 .indicator.active {
-  background-color: #30757A;
+  background-color: #000000;
 }
 
 .donor-data {
   display: flex;
   align-items: center;
   background-color: #30757A;
-  height: 20%;
+  height: 3.18rem;
   border-radius: 0 0 20px 20px;
+  color: #FAFAFA;
+  font-size: 0.75rem;
 }
 
 .donor-data img {
