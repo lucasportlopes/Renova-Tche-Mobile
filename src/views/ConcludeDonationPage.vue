@@ -22,10 +22,18 @@
     data() {
       return {
         donation: {
-          itemName: 'Banheiro',
-          receiver: 'Carlos Silva',
+          itemName: '',
+          receiver: '',
         },
       };
+    },
+    created() {
+    const requestData = this.$route.query.data;
+    if (requestData) {
+      const request = JSON.parse(requestData);
+      this.donation.itemName = request.itemName;
+      this.donation.receiver = request.userName;
+    }
     },
     methods: {
       markAsCompleted() {

@@ -65,6 +65,11 @@ const routes = [
     component: NotificationsPage
   },
   {
+    path: '/requests',
+    name: 'requests',
+    component: RequestStatusPage
+  },
+  {
     path: '/solicitacoes',
     name: 'requestStatus',
     component: RequestStatusPage

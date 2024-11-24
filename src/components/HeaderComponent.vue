@@ -10,7 +10,7 @@
       <IonButton fill="clear" @click="navigateToNotifications">
         <IonIcon slot="icon-only" :icon="notificationsOutline" class="icon" />
       </IonButton>
-      <IonButton fill="clear" @click="showAlert('Profile')" class="profile-picture">
+      <IonButton fill="clear" @click="navigateToRequests" class="profile-picture">
         <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Profile Picture" />
       </IonButton>
     </div>
@@ -40,6 +40,10 @@ export default {
       router.push({ name: 'notifications' });
     };
 
+    const navigateToRequests = () => {
+      router.push({ name: 'requests' });
+    };
+
     const showAlert = (msg) => {
       alert(`"${msg}" Não implementado`);
     };
@@ -55,6 +59,7 @@ export default {
     return {
       title,
       navigateToNotifications,
+      navigateToRequests,
       showAlert,
       help,
       notificationsOutline,
