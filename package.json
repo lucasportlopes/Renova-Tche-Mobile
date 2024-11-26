@@ -19,6 +19,7 @@
     "@capacitor/status-bar": "6.0.1",
     "@ionic/vue": "^8.0.0",
     "@ionic/vue-router": "^8.0.0",
+    "@supabase/supabase-js": "^2.46.1",
     "@tailwindcss/typography": "^0.5.15",
     "ionicons": "^7.0.0",
     "tailwind": "^4.0.0",

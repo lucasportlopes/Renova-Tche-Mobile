@@ -23,10 +23,10 @@
         class="ionitem"
         @click="goToDetails(donation)"
       >
-        <DonationCard 
+        <DonationCard
           :itemPhotos="donation.photos"
-          :donorPhoto="donation.donorPhoto" 
-          :donorName="donation.donorName"
+          :donor_photo="donation.donorPhoto"
+          :donor_name="donation.donorName"
         />
       </IonItem>
     </IonList>
@@ -39,8 +39,7 @@
   </IonContent>
 </template>
 
-
-<script>
+<script lang="ts" setup>
 import {
   IonContent,
   IonList,
@@ -48,52 +47,81 @@ import {
   IonFab,
   IonFabButton,
 } from '@ionic/vue';
+import { DonationCategory, Donation } from '@/data/DonationsMock';
+import { onMounted, ref, computed } from 'vue';
+import { supabase } from '@/lib/supabase';
 import DonationCard from '@/components/DonationCard.vue';
-import DonationsMock, { DonationCategory } from '@/data/DonationsMock';
 
-export default {
-  components: {
-    IonContent,
-    IonList,
-    IonItem,
-    DonationCard,
-    IonFab,
-    IonFabButton,
-  },
+const donations = ref<Donation[]>([]);
 
-  data() {
-    return {
-      donations: DonationsMock,
-      categories: [
-        { value: DonationCategory.APPLIANCES, label: 'Eletrodomésticos' },
-        { value: DonationCategory.CONSTRUCTION, label: 'Materiais de construção' },
-        { value: DonationCategory.OTHER, label: 'Outros' },
-      ],
-      selectedCategory: null,
-      filteredDonations: DonationsMock,
-    };
-  },
+const selectedCategory = ref<string | null>(null);
 
-  methods: {
-    filterDonations(categoryValue) {
-      this.selectedCategory = categoryValue;
-      this.filteredDonations = this.donations.filter(
-        (donation) => donation.category === categoryValue || !categoryValue
-      );
-    },
+const categories = [
+  { value: DonationCategory.APPLIANCES, label: 'Eletrodomésticos' },
+  { value: DonationCategory.CONSTRUCTION, label: 'Materiais de construção' },
+  { value: DonationCategory.OTHER, label: 'Outros' },
+];
 
-    navigateToAddPage() {
-      this.$router.push('/cadastrar');
-    },
+const filteredDonations = computed(() =>
+  selectedCategory.value
+    ? donations.value.filter((donation) => donation.category === selectedCategory.value)
+    : donations.value
+);
 
-    goToDetails(donation) {
-      this.$router.push({
-        path: `/detalhes/${donation.id}`,
-        query: { data: JSON.stringify(donation) },
-      });
-    },
-  },
-};
+async function fetchDonations() {
+  try {
+    const { data, error } = await supabase
+      .from('donations')
+      .select(`
+        id,
+        donor_photo,
+        donor_name,
+        item_name,
+        item_amount,
+        address,
+        status,
+        category,
+        donation_photos(photo_url)
+      `);
+
+    if (error) {
+      console.error('Erro ao buscar doações:', error.message);
+      return;
+    }
+
+    if (data) {
+      donations.value = data.map((donation) => ({
+        id: donation.id,
+        donorPhoto: donation.donor_photo,
+        donorName: donation.donor_name,
+        itemName: donation.item_name,
+        itemAmount: donation.item_amount,
+        photos: donation.donation_photos.map((photo) => photo.photo_url),
+        address: donation.address,
+        status: donation.status,
+        category: donation.category,
+      })) as Donation[]; // Casting para garantir a tipagem
+    }
+  } catch (err) {
+    console.error('Erro inesperado:', err);
+  }
+}
+
+function filterDonations(categoryValue: string | null) {
+  selectedCategory.value = categoryValue;
+}
+
+function navigateToAddPage() {
+  window.location.href = '/cadastrar';
+}
+
+function goToDetails(donation: Donation) {
+  window.location.href = `/detalhes/${donation.id}?data=${encodeURIComponent(JSON.stringify(donation))}`;
+}
+
+onMounted(() => {
+  fetchDonations();
+});
 </script>
 
 <style scoped>
@@ -108,12 +136,7 @@ export default {
 .content {
   padding: 0;
   height: 100%;
-  --background: #F9F6E2;
-}
-
-.donation-item {
-  border-bottom: none;
-  background-color: transparent;
+  --background: #f9f6e2;
 }
 
 .ionitem {
@@ -122,20 +145,14 @@ export default {
 }
 
 .add-button {
-  --background: #30757A;
+  --background: #30757a;
   height: 3.5rem;
   width: 3.5rem;
   --border-radius: 12px;
   font-size: 1rem;
 }
 
-.content {
-  padding: 0;
-  height: 100%;
-  --background: #F9F6E2;
-}
-
 .category-selected {
-  color: #30757A;
+  color: #30757a;
 }
 </style>
