@@ -25,8 +25,8 @@
       >
         <DonationCard
           :itemPhotos="donation.photos"
-          :donor_photo="donation.donorPhoto"
-          :donor_name="donation.donorName"
+          :donorPhoto="donation.donorPhoto"
+          :donorName="donation.donorName"
         />
       </IonItem>
     </IonList>
@@ -90,6 +90,7 @@ async function fetchDonations() {
     }
 
     if (data) {
+      console.log(data)
       donations.value = data.map((donation) => ({
         id: donation.id,
         donorPhoto: donation.donor_photo,
