@@ -51,7 +51,7 @@
           <div
             v-if="form.images.length < maxImages"
             class="add-image-button"
-            @click="addImage"
+            @click="addRandomImage"
           >
             <IonIcon name="add" />
           </div>
@@ -88,6 +88,7 @@ import {
   IonButton,
   IonIcon
 } from '@ionic/vue';
+import { DonationsPhotosMock } from '@/data/DonationsMock';
 
 export default {
   components: {
@@ -150,6 +151,11 @@ export default {
 
     removeImage(index) {
       this.form.images.splice(index, 1);
+    },
+
+    addRandomImage() {
+      const randomImage = DonationsPhotosMock[Math.floor(Math.random() * DonationsPhotosMock.length)];
+      this.form.images.push(randomImage);
     }
   }
 };

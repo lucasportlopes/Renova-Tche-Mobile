@@ -10,6 +10,7 @@ import RequestDonationPage from '@/views/RequestDonationPage.vue';
 import NotificationsPage from '@/views/NotificationsPage.vue';
 import RequestStatusPage from '@/views/RequestStatusPage.vue'; 
 import ConcludeDonationPage from '@/views/ConcludeDonationPage.vue';
+import ActionDetailsPage from '@/views/ActionDetailsPage.vue';
 
 const routes = [
   {
@@ -45,6 +46,12 @@ const routes = [
     path: '/detalhes/:id',
     name: 'donationDetails',
     component: DonationDetailsPage,
+    props: true
+  },
+  {
+    path: '/detalhes/:id',
+    name: 'actionDetails',
+    component: ActionDetailsPage,
     props: true
   },
   {

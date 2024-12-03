@@ -71,3 +71,15 @@ const DonationsMock: Donation[] = [
 ]
 
 export default DonationsMock;
+
+export const DonationsPhotosMock: string[] = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0tV7fK9fqShYKSnCac14dAIjyf_899PLIjw&s',
+  'https://images.tcdn.com.br/img/img_prod/1143137/panela_parmegiana_alca_de_ferro_e_tampa_de_vidro_13x29cm_3l_525_1_fa9a9d6f7b940e68411afc4d8949b62b.jpg',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9TasrMLbQv5QaV-dm15tLfNA3mKh8kS0Tig&s',
+  'https://telhanorte.vtexassets.com/arquivos/ids/1234903/1402951.jpg?v=637957654629930000',
+  'https://imgs.casasbahia.com.br/55056727/1g.jpg',
+  'https://d5gag3xtge2og.cloudfront.net/producao/34360658/G/blocos_18.jpg',
+  'https://a-static.mlcdn.com.br/800x560/fogao-de-piso-esmaltec-4-bocas-bali-4111/magazineluiza/236594000/3a0951df487cddcce368d55ad8438464.jpg',
+  'https://images.tcdn.com.br/img/img_prod/1130862/panela_de_ceramica_buffet_duo_28cm_2500ml_chocolate_3622_1_75110bf9dea80eda15c9c010192320f5.jpg',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0opE-XZ8sqta6K_9pKX2C5UdnmPX4g7-YIg&s',
+]
