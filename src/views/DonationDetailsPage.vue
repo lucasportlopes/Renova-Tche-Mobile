@@ -32,7 +32,7 @@
       <!-- Botões dinâmicos -->
       <div class="button-group">
         <IonButton
-          v-if="isDoador"
+          v-if="adData.isDoador"
           expand="block"
           color="primary"
           @click="editInfo"
@@ -61,6 +61,7 @@ import {
   IonButtons,
 } from '@ionic/vue';
 import ImageCarousel from '@/components/ImageCarousel.vue';
+import { DonationCategory } from '@/data/DonationsMock';
 
 export default {
   components: {
@@ -89,7 +90,9 @@ export default {
     getAdDataFromRoute() {
       try {
         const data = this.$route.query.data ? JSON.parse(this.$route.query.data) : {};
+        console.log("data", data)
         return {
+          id: data.id || null,
           images: data.photos.length ? data.photos : [
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9TasrMLbQv5QaV-dm15tLfNA3mKh8kS0Tig&s',
             'https://telhanorte.vtexassets.com/arquivos/ids/1234903/1402951.jpg?v=637957654629930000',
@@ -102,6 +105,7 @@ export default {
           itemAmount: data.itemAmount || 'Não informado',
           address: data.address || 'Não informado',
           needsHelp: data.needsHelp || 'Não informado',
+          isDoador: data.donorId === 7,
         };
       } catch (error) {
         console.error('Erro ao carregar dados do anúncio:', error);

@@ -13,7 +13,8 @@ export interface Donation {
   photos: string[];
   address: string;
   status: DonationStatus;
-  category: DonationCategory; // Nova propriedade
+  category: DonationCategory; // Nova propriedade,
+  donorId: number;
 }
 
 export enum DonationStatus {

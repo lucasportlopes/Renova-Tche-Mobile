@@ -115,6 +115,29 @@ export default {
     };
   },
 
+  mounted() {
+    try {
+      const data = this.$route.query.data ? JSON.parse(this.$route.query.data) : {};
+      this.form = {
+        id: data.id || null,
+        images: data.images || [],
+        address: data.address || '',
+        itemName: data.itemName || '',
+        itemAmount: data.itemAmount || '',
+        needsHelp: data.address.length > 0 ? 'yes' : null
+      };
+    } catch (error) {
+      console.error('Erro ao carregar os dados da doação:', error);
+      this.confirmationData = {
+        images: [],
+        address: '',
+        itemName: '',
+        itemAmount: '',
+        needsHelp: null
+      };
+    }
+  },
+
   computed: {
     isFormValid() {
       return (

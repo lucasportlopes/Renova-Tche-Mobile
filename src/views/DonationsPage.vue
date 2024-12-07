@@ -81,6 +81,7 @@ async function fetchDonations() {
         address,
         status,
         category,
+        donor_id,
         donation_photos(photo_url)
       `);
 
@@ -101,6 +102,7 @@ async function fetchDonations() {
         address: donation.address,
         status: donation.status,
         category: donation.category,
+        donorId: donation.donor_id,
       })) as Donation[]; // Casting para garantir a tipagem
     }
   } catch (err) {

@@ -16,8 +16,7 @@
       <!-- Dados da Doação -->
       <div class="donation-details">
         <p><strong>Qual o endereço?</strong><br />{{ confirmationData.address || 'Não informado' }}</p>
-        <p><strong>O que precisa?</strong><br />{{ confirmationData.itemName || 'Não informado' }}</p>
-        <p><strong>Área medida?</strong><br />{{ confirmationData.itemAmount || 'Não informado' }} metros</p>
+        <p><strong>O que está doando?</strong><br />{{ confirmationData.itemName || 'Não informado' }}</p>
         <p><strong>Equipe?</strong><br />{{ confirmationData.needsHelp === 'yes' ? 'Precisa de ajuda' : 'Não precisa de ajuda' }}</p>
       </div>
 
@@ -36,6 +35,7 @@
 
 <script>
 import { IonContent, IonButton } from '@ionic/vue';
+import { supabase } from '@/lib/supabase';
 
 export default {
   components: {
@@ -52,6 +52,7 @@ export default {
     try {
       const data = this.$route.query.data ? JSON.parse(this.$route.query.data) : {};
       this.confirmationData = {
+        id: data.id || null,
         images: data.images || [],
         address: data.address || '',
         itemName: data.itemName || '',
@@ -74,10 +75,92 @@ export default {
       this.$router.back(); // Retorna para a tela anterior
     },
 
-    confirmDonation() {
+    async confirmDonation() {
       console.log('Doação Confirmada:', this.confirmationData);
-      // Aqui você pode integrar com uma API para enviar os dados
-      this.$router.push('/doacoes'); // Redireciona para a tela de doações
+
+      const donorPhoto = 'https://randomuser.me/api/portraits/women/8.jpg';
+      const donorName = 'Dev Name';
+      const category = 'Outros';
+      const status = 'OPEN';
+
+      if(this.confirmationData.id) {
+        // Atualiza a doação existente
+        const { error: updateError } = await supabase
+          .from('donations')
+          .update({
+            donor_photo: donorPhoto,
+            donor_name: donorName,
+            item_name: this.confirmationData.itemName,
+            item_amount: this.confirmationData.itemAmount,
+            address: this.confirmationData.address,
+            status: status,
+            category: category,
+            donor_id: 7, // id de doador 7 usado como padrão para a conta 'logada' que estamos usando
+          })
+          .eq('id', this.confirmationData.id);
+
+          if (updateError) {
+            console.log('Erro ao atualizar doação:', updateError);
+            return;
+          }
+
+          const { error: deleteError } = await supabase
+            .from('donation_photos')
+            .delete()
+            .eq('donation_id', this.confirmationData.id);
+
+          if (deleteError) {
+            console.log('Erro ao deletar fotos antigas:', deleteError);
+            return;
+          }
+
+          const photoInsertData = this.confirmationData.images.map((url) => ({
+            donation_id: this.confirmationData.id,
+            photo_url: url,
+          }));
+
+          const { error: photoError } = await supabase
+            .from('donation_photos')
+            .insert(photoInsertData);
+
+          if (photoError) {
+            console.log('Erro ao atualizar fotos da doação:', photoError);
+          }
+          this.$router.push('/doacoes');
+      } else {
+        const { data: donationData, error: donationError } = await supabase
+          .from('donations')
+          .insert([
+            {
+              donor_photo: donorPhoto,
+              donor_name: donorName,
+              item_name: this.confirmationData.itemName,
+              item_amount: this.confirmationData.itemAmount,
+              address: this.confirmationData.address,
+              status: status,
+              category: category,
+              donor_id: 7,
+            },
+          ])
+          .select();
+  
+        if (donationError) console.log('Erro ao inserir doação:', donationError);
+  
+        const donationId = donationData[0].id;
+  
+        const photoInsertData = this.confirmationData.images.map((url) => ({
+          donation_id: donationId,
+          photo_url: url,
+        }));
+  
+        const { error: photoError } = await supabase
+          .from('donation_photos')
+          .insert(photoInsertData);
+  
+        if (photoError) console.log('Erro ao inserir fotos da doação:', photoError);
+  
+        this.$router.push('/doacoes'); // Redireciona para a tela de doações
+      }
     }
   }
 };
