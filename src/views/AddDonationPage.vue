@@ -124,7 +124,7 @@ export default {
         address: data.address || '',
         itemName: data.itemName || '',
         itemAmount: data.itemAmount || '',
-        needsHelp: data.address.length > 0 ? 'yes' : null
+        needsHelp: data.address?.length > 0 ? 'yes' : null
       };
     } catch (error) {
       console.error('Erro ao carregar os dados da doação:', error);

@@ -51,6 +51,9 @@ import { DonationCategory, Donation } from '@/data/DonationsMock';
 import { onMounted, ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
 import DonationCard from '@/components/DonationCard.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const donations = ref<Donation[]>([]);
 
@@ -82,8 +85,9 @@ async function fetchDonations() {
         status,
         category,
         donor_id,
+        request_user_id,
         donation_photos(photo_url)
-      `);
+      `).eq('status', 'OPEN');
 
     if (error) {
       console.error('Erro ao buscar doações:', error.message);
@@ -103,6 +107,7 @@ async function fetchDonations() {
         status: donation.status,
         category: donation.category,
         donorId: donation.donor_id,
+        requestUserId: donation.request_user_id,
       })) as Donation[]; // Casting para garantir a tipagem
     }
   } catch (err) {
@@ -115,11 +120,20 @@ function filterDonations(categoryValue: string | null) {
 }
 
 function navigateToAddPage() {
-  window.location.href = '/cadastrar';
+  // window.location.href = '/cadastrar';
+  router.push('/cadastrar');
 }
 
+// function goToDetails(donation: Donation) {
+//   window.location.href = `/detalhes/${donation.id}?data=${encodeURIComponent(JSON.stringify(donation))}`;
+// }
+
 function goToDetails(donation: Donation) {
-  window.location.href = `/detalhes/${donation.id}?data=${encodeURIComponent(JSON.stringify(donation))}`;
+  router.push({
+    name: 'donationDetails',
+    params: { id: donation.id },
+    query: { data: JSON.stringify(donation) },
+  });
 }
 
 onMounted(() => {

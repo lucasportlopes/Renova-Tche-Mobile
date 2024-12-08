@@ -3,8 +3,9 @@
       <h1 class="title">Solicitações Recebidas</h1>
       <div v-if="requests.length">
         <div v-for="request in requests" :key="request.id" class="request-card">
-          <p><strong>Item:</strong> {{ request.itemName }}</p>
-          <p><strong>Solicitante:</strong> {{ request.userName }}</p>
+          <p><strong>Item:</strong> {{ request.item_name }}</p>
+          <p><strong>Solicitante:</strong> {{ request.request_user.name }}</p>
+          <p><strong>Status:</strong> {{ request.status }}</p>
           <div class="button-group">
             <!-- Botões para aceitar/rejeitar -->
             <IonButton
@@ -22,14 +23,14 @@
               Rejeitar
             </IonButton>
   
-            <!-- Botão para concluir a doação -->
+            <!-- Botão para concluir a doação
             <IonButton
               v-if="request.status === 'ACCEPTED'"
               color="success"
               @click="navigateToConclude(request)"
             >
               Concluir Doação
-            </IonButton>
+            </IonButton> -->
           </div>
         </div>
       </div>
@@ -38,44 +39,111 @@
   </template>
   
   <script>
-  import { IonContent, IonButton } from '@ionic/vue';
-  
-  export default {
-    components: {
-      IonContent,
-      IonButton,
-    },
-    data() {
-      return {
-        requests: [
-          { id: 1, itemName: 'Banheiro', userName: 'Carlos Silva', status: 'PENDING' },
-          { id: 2, itemName: 'Tijolos', userName: 'Ana Paula', status: 'ACCEPTED' },
-        ],
-      };
-    },
-    methods: {
-      acceptRequest(requestId) {
-        console.log('Solicitação aceita:', requestId);
-        const request = this.requests.find((r) => r.id === requestId);
-        if (request) {
-          request.status = 'ACCEPTED'; // Atualiza o status da solicitação
+import { IonContent, IonButton } from '@ionic/vue';
+import { ref, onMounted, inject } from 'vue';
+import { supabase } from '@/lib/supabase';
+
+export default {
+  components: {
+    IonContent,
+    IonButton,
+  },
+  setup() {
+    const requests = ref([]);
+
+    const user = inject('user');
+
+    const fetchRequests = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('donations')
+          .select(`
+            id,
+            item_name,
+            status,
+            donor_name,
+            request_user:users!request_user_id (
+              id,
+              username,
+              photo,
+              name
+            )
+          `)
+          .eq('donor_id', user.id)
+          .neq('status', 'OPEN');
+
+        if (error) {
+          console.error('Erro ao buscar solicitações recebidas:', error.message);
+          return;
         }
-      },
-      rejectRequest(requestId) {
-        console.log('Solicitação rejeitada:', requestId);
-        this.requests = this.requests.filter((r) => r.id !== requestId); // Remove a solicitação
-      },
-      navigateToConclude(request) {
-        console.log('Navegando para concluir doação:', request);
-        this.$router.push({
-          name: 'concludeDonation',
-          params: { id: request.id },
-          query: { data: JSON.stringify(request) },
-        });
-      },
-    },
-  };
-  </script>
+
+        if (data) {
+          requests.value = data;
+        }
+      } catch (error) {
+        console.error('Erro ao buscar solicitações recebidas:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchRequests();
+    });
+
+    const acceptRequest = async (requestId) => {
+      console.log('Solicitação aceita:', requestId);
+      try {
+        const { error } = await supabase
+          .from('donations')
+          .update({ status: 'ACCEPTED' })
+          .eq('id', requestId);
+
+        if (error) {
+          console.error('Erro ao aceitar solicitação:', error.message);
+        } else {
+          const request = requests.value.find((r) => r.id === requestId);
+          if (request) request.status = 'ACCEPTED';
+        }
+      } catch (error) {
+        console.error('Erro ao aceitar solicitação:', error);
+      }
+    };
+
+    const rejectRequest = async (requestId) => {
+      console.log('Solicitação rejeitada:', requestId);
+      try {
+        const { error } = await supabase
+          .from('donations')
+          .update({ status: 'OPEN', request_user_id: null })
+          .eq('id', requestId);
+
+        if (error) {
+          console.error('Erro ao rejeitar solicitação:', error.message);
+        } else {
+          requests.value = requests.value.filter((r) => r.id !== requestId);
+        }
+      } catch (error) {
+        console.error('Erro ao rejeitar solicitação:', error);
+      }
+    };
+
+    const navigateToConclude = (request) => {
+      console.log('Navegando para concluir doação:', request);
+      this.$router.push({
+        name: 'concludeDonation',
+        params: { id: request.id },
+        query: { data: JSON.stringify(request) },
+      });
+    };
+
+    return {
+      requests,
+      acceptRequest,
+      rejectRequest,
+      navigateToConclude,
+    };
+  },
+};
+</script>
     
     <style scoped>
     .content {

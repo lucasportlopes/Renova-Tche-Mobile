@@ -3,7 +3,7 @@
       <h1 class="title">Minhas Solicitações</h1>
       <div v-if="requests.length">
         <div v-for="request in requests" :key="request.id" class="status-card">
-          <p><strong>Item:</strong> {{ request.itemName }}</p>
+          <p><strong>Item:</strong> {{ request.item_name }}</p>
           <p><strong>Status:</strong> {{ request.status }}</p>
         </div>
       </div>
@@ -13,20 +13,50 @@
   
   <script>
   import { IonContent } from '@ionic/vue';
-  
+  import { ref, onMounted, inject } from 'vue';
+  import { supabase } from '@/lib/supabase';
+
   export default {
-    components: {
-      IonContent,
-    },
-    data() {
-      return {
-        requests: [
-          { id: 1, itemName: 'Banheiro', status: 'Aguardando aprovação' },
-          { id: 2, itemName: 'Tijolos', status: 'Aprovado' },
-        ],
-      };
-    },
-  };
+  components: {
+    IonContent,
+  },
+  setup() {
+    const requests = ref([]);
+
+    const user = inject('user');
+
+    const fetchRequests = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('donations')
+          .select(`
+            id,
+            item_name,
+            status
+          `)
+          .eq('request_user_id', user.id);
+        if (error) {
+          console.error('Erro ao buscar solicitações:', error.message);
+          return;
+        }
+
+        if (data) {
+          requests.value = data;
+        }
+      } catch (error) {
+        console.error('Erro ao buscar solicitações:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchRequests();
+    });
+
+    return {
+      requests,
+    };
+  },
+};
   </script>
   
   <style scoped>

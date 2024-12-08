@@ -15,6 +15,7 @@ export interface Donation {
   status: DonationStatus;
   category: DonationCategory; // Nova propriedade,
   donorId: number;
+  requestUserId?: number;
 }
 
 export enum DonationStatus {

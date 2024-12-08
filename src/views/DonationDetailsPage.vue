@@ -58,10 +58,10 @@ import {
   IonSegment,
   IonSegmentButton,
   IonButton,
-  IonButtons,
 } from '@ionic/vue';
 import ImageCarousel from '@/components/ImageCarousel.vue';
-import { DonationCategory } from '@/data/DonationsMock';
+import { supabase } from '@/lib/supabase';
+import { inject } from 'vue';
 
 export default {
   components: {
@@ -72,12 +72,11 @@ export default {
     ImageCarousel,
   },
 
-  props: {
-    isDoador: {
-      type: Boolean,
-      required: true,
+  setup() {
+    const user = inject('user');
+    console.log('global user is:', user);
+    return { user };
     },
-  },
 
   data() {
     return {
@@ -105,7 +104,7 @@ export default {
           itemAmount: data.itemAmount || 'Não informado',
           address: data.address || 'Não informado',
           needsHelp: data.needsHelp || 'Não informado',
-          isDoador: data.donorId === 7,
+          isDoador: data.donorId === this.user.id,
         };
       } catch (error) {
         console.error('Erro ao carregar dados do anúncio:', error);
@@ -121,9 +120,16 @@ export default {
       });
     },
 
-    requestDonation() {
+    async requestDonation() {
       console.log('Doação solicitada:', this.adData);
       alert('Doação solicitada com sucesso!');
+
+      // Atualiza o status da doação para "Solicitado"
+      const { error } = await supabase
+        .from('donations')
+        .update({ status: 'PENDING', request_user_id: this.user.id })
+        .eq('id', this.adData.id);
+
       this.$router.push('/solicitacoes');
     },
   },
