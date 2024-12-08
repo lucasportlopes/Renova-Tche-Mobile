@@ -36,11 +36,17 @@
 <script>
 import { IonContent, IonButton } from '@ionic/vue';
 import { supabase } from '@/lib/supabase';
+import { inject } from 'vue';
 
 export default {
   components: {
     IonContent,
     IonButton
+  },
+
+  setup() {
+    const user = inject('user');
+    return { user };
   },
 
   data() {
@@ -78,8 +84,10 @@ export default {
     async confirmDonation() {
       console.log('Doação Confirmada:', this.confirmationData);
 
-      const donorPhoto = 'https://randomuser.me/api/portraits/women/8.jpg';
-      const donorName = 'Dev Name';
+      // const donorPhoto = 'https://randomuser.me/api/portraits/women/8.jpg';
+      // const donorName = 'Dev Name';
+      const donorPhoto = this.user.photo;
+      const donorName = this.user.name;
       const category = 'Outros';
       const status = 'OPEN';
 
@@ -95,7 +103,7 @@ export default {
             address: this.confirmationData.address,
             status: status,
             category: category,
-            donor_id: 7, // id de doador 7 usado como padrão para a conta 'logada' que estamos usando
+            donor_id: this.user.id
           })
           .eq('id', this.confirmationData.id);
 
@@ -139,7 +147,7 @@ export default {
               address: this.confirmationData.address,
               status: status,
               category: category,
-              donor_id: 7,
+              donor_id: this.user.id,
             },
           ])
           .select();
