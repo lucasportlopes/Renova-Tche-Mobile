@@ -24,6 +24,17 @@
       </IonItem>
 
       <IonItem class="form-item">
+        <IonLabel position="stacked">Unidade de Medida</IonLabel>
+        <IonSelect v-model="form.unit" placeholder="Escolher unidade" interface="popover">
+          <IonSelectOption value="kg">Kilograma (kg)</IonSelectOption>
+          <IonSelectOption value="g">Grama (g)</IonSelectOption>
+          <IonSelectOption value="l">Litro (l)</IonSelectOption>
+          <IonSelectOption value="ml">Mililitro (ml)</IonSelectOption>
+          <IonSelectOption value="un">Unidade (un)</IonSelectOption>
+        </IonSelect>
+      </IonItem>
+
+      <IonItem class="form-item">
         <IonLabel position="stacked">Precisa de ajuda para buscar?</IonLabel>
         <IonSelect v-model="form.needsHelp" placeholder="Escolher" interface="popover">
           <IonSelectOption value="yes">Preciso de ajuda</IonSelectOption>
@@ -104,12 +115,13 @@ export default {
   data() {
     return {
       form: {
-        itemName: '',
-        itemAmount: '',
-        needsHelp: null,
-        address: '',
-        images: [] // Armazena as URLs das imagens carregadas
-      },
+      itemName: '',
+      itemAmount: '',
+      unit: null, // Nova propriedade para unidade de medida
+      needsHelp: null,
+      address: '',
+      images: [] // Armazena as URLs das imagens carregadas
+    },
       maxImages: 4 // Limite de imagens permitidas
     };
   },
@@ -119,6 +131,7 @@ export default {
       return (
         this.form.itemName &&
         this.form.itemAmount &&
+        this.form.unit && // Validação da unidade de medida
         (this.form.needsHelp === 'no' || this.form.address) &&
         this.form.images.length > 0
       );
@@ -165,6 +178,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 16px;
 }
 
 .title {

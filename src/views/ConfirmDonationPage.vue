@@ -12,13 +12,15 @@
           </div>
         </div>
       </div>
-
-      <!-- Dados da Doação -->
       <div class="donation-details">
         <p><strong>Qual o endereço?</strong><br />{{ confirmationData.address || 'Não informado' }}</p>
-        <p><strong>O que precisa?</strong><br />{{ confirmationData.itemName || 'Não informado' }}</p>
-        <p><strong>Área medida?</strong><br />{{ confirmationData.itemAmount || 'Não informado' }} metros</p>
-        <p><strong>Equipe?</strong><br />{{ confirmationData.needsHelp === 'yes' ? 'Precisa de ajuda' : 'Não precisa de ajuda' }}</p>
+        <p><strong>O que deseja doar?</strong><br />{{ confirmationData.itemName || 'Não informado' }}</p>
+        <p><strong>Quantidade e unidade:</strong><br />
+          {{ confirmationData.itemAmount || 'Não informado' }} {{ confirmationData.unit || '' }}
+        </p>
+        <p><strong>Precisa de ajuda?</strong><br />
+          {{ confirmationData.needsHelp === 'yes' ? 'Precisa de ajuda' : 'Não precisa de ajuda' }}
+        </p>
       </div>
 
       <!-- Botões de ação -->
@@ -56,6 +58,7 @@ export default {
         address: data.address || '',
         itemName: data.itemName || '',
         itemAmount: data.itemAmount || '',
+        unit: data.unit || '', // Inclui a unidade de medida
         needsHelp: data.needsHelp || 'no'
       };
     } catch (error) {
@@ -65,6 +68,7 @@ export default {
         address: '',
         itemName: '',
         itemAmount: '',
+        unit: '',
         needsHelp: 'no'
       };
     }
@@ -93,6 +97,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 16px;
 }
 
 .title {
